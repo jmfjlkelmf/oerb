@@ -1,5 +1,5 @@
 # Bağlantı linkini belirle
-$link = "https://raw.githubusercontent.com/jmfjlkelmf/oerb/main/rotg"
+$link = https://raw.githubusercontent.com/jmfjlkelmf/oerb/main/rotg
 
 # IP adresi ve portu ayır
 $parts = $link -split ':'
